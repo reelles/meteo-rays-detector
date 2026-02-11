@@ -72,9 +72,8 @@ unsigned long GPSHandler::getTimestamp() {
         return 0;
     }
     
-    // Return Unix timestamp (seconds since 1970-01-01)
-    // Note: This is a simplified calculation
-    // For production, consider using a proper time library
+    // Return Unix timestamp (seconds since 1970-01-01) from GPS UTC time
+    // GPS provides UTC time, so we need to convert without timezone adjustment
     struct tm timeinfo;
     timeinfo.tm_year = gps.date.year() - 1900;
     timeinfo.tm_mon = gps.date.month() - 1;
@@ -84,7 +83,12 @@ unsigned long GPSHandler::getTimestamp() {
     timeinfo.tm_sec = gps.time.second();
     timeinfo.tm_isdst = 0;
     
-    return mktime(&timeinfo);
+    // Set timezone to UTC to prevent local timezone offset
+    setenv("TZ", "UTC", 1);
+    tzset();
+    time_t timestamp = mktime(&timeinfo);
+    
+    return (unsigned long)timestamp;
 }
 
 void GPSHandler::getDateTime(int &year, int &month, int &day, int &hour, int &minute, int &second) {
