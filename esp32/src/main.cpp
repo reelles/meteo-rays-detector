@@ -93,16 +93,17 @@ void loop() {
             Serial.println(energy);
             
             // Prepare MQTT payload
-            char payload[128];
-            snprintf(payload, sizeof(payload), 
-                     "{\"type\":\"lightning\",\"distance\":%d,\"energy\":%lu}", 
-                     distance, energy);
+            char payload[256];
             
             // Add GPS location if available
             if (gpsHandler->hasLocation()) {
                 snprintf(payload, sizeof(payload), 
                          "{\"type\":\"lightning\",\"distance\":%d,\"energy\":%lu,\"lat\":%.6f,\"lon\":%.6f}", 
                          distance, energy, gpsHandler->getLatitude(), gpsHandler->getLongitude());
+            } else {
+                snprintf(payload, sizeof(payload), 
+                         "{\"type\":\"lightning\",\"distance\":%d,\"energy\":%lu}", 
+                         distance, energy);
             }
             
             // Publish to MQTT

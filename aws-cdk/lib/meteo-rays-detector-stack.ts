@@ -77,6 +77,17 @@ export class MeteoRaysDetectorStack extends cdk.Stack {
         effect: iam.Effect.ALLOW,
         actions: [
           'iot:Publish',
+        ],
+        resources: [
+          `arn:aws:iot:${this.region}:${this.account}:topic/meteo-rays/*`,
+        ],
+      })
+    );
+    
+    mqttBrokerLambda.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: [
           'iot:DescribeEndpoint',
         ],
         resources: ['*'],
