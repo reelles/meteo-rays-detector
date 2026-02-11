@@ -1,0 +1,17 @@
+{
+  "name": "meteo-rays-mqtt-broker",
+  "version": "1.0.0",
+  "description": "Lambda function for processing MQTT messages from Meteo Rays Detector",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-iot-data-plane": "^3.400.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
