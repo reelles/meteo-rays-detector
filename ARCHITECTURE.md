@@ -128,9 +128,11 @@ Topic: `meteo-rays/lightning`
   "energy": 123456,
   "lat": 40.7128,
   "lon": -74.0060,
-  "timestamp": 1234567890
+  "gps_timestamp": 1234567890
 }
 ```
+
+**Note**: The `gps_timestamp` field contains the GPS time (Unix timestamp) when the event was detected. This enables synchronization across multiple sensors for triangulation of the actual lightning position.
 
 ### Location Update
 
@@ -142,7 +144,9 @@ Topic: `meteo-rays/location`
   "lon": -74.0060,
   "alt": 10.5,
   "sats": 8,
-  "timestamp": 1234567890
+  "gps_timestamp": 1234567890
+}
+```
 }
 ```
 

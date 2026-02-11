@@ -22,6 +22,9 @@ public:
     int getSatellites();
     String getFormattedLocation();
     bool isValid();
+    bool hasTime();
+    unsigned long getTimestamp();
+    void getDateTime(int &year, int &month, int &day, int &hour, int &minute, int &second);
 };
 
 #endif // GPS_HANDLER_H

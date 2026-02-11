@@ -1,4 +1,5 @@
 #include "GPSHandler.h"
+#include <time.h>
 
 GPSHandler::GPSHandler(HardwareSerial* serial) {
     this->gpsSerial = serial;
@@ -60,4 +61,37 @@ String GPSHandler::getFormattedLocation() {
 
 bool GPSHandler::isValid() {
     return gps.location.isValid();
+}
+
+bool GPSHandler::hasTime() {
+    return gps.time.isValid() && gps.date.isValid();
+}
+
+unsigned long GPSHandler::getTimestamp() {
+    if (!hasTime()) {
+        return 0;
+    }
+    
+    // Return Unix timestamp (seconds since 1970-01-01)
+    // Note: This is a simplified calculation
+    // For production, consider using a proper time library
+    struct tm timeinfo;
+    timeinfo.tm_year = gps.date.year() - 1900;
+    timeinfo.tm_mon = gps.date.month() - 1;
+    timeinfo.tm_mday = gps.date.day();
+    timeinfo.tm_hour = gps.time.hour();
+    timeinfo.tm_min = gps.time.minute();
+    timeinfo.tm_sec = gps.time.second();
+    timeinfo.tm_isdst = 0;
+    
+    return mktime(&timeinfo);
+}
+
+void GPSHandler::getDateTime(int &year, int &month, int &day, int &hour, int &minute, int &second) {
+    year = gps.date.year();
+    month = gps.date.month();
+    day = gps.date.day();
+    hour = gps.time.hour();
+    minute = gps.time.minute();
+    second = gps.time.second();
 }

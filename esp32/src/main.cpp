@@ -95,11 +95,18 @@ void loop() {
             // Prepare MQTT payload
             char payload[256];
             
-            // Add GPS location if available
+            // Add GPS location and timestamp if available
             if (gpsHandler->hasLocation()) {
-                snprintf(payload, sizeof(payload), 
-                         "{\"type\":\"lightning\",\"distance\":%d,\"energy\":%lu,\"lat\":%.6f,\"lon\":%.6f}", 
-                         distance, energy, gpsHandler->getLatitude(), gpsHandler->getLongitude());
+                if (gpsHandler->hasTime()) {
+                    unsigned long gpsTimestamp = gpsHandler->getTimestamp();
+                    snprintf(payload, sizeof(payload), 
+                             "{\"type\":\"lightning\",\"distance\":%d,\"energy\":%lu,\"lat\":%.6f,\"lon\":%.6f,\"gps_timestamp\":%lu}", 
+                             distance, energy, gpsHandler->getLatitude(), gpsHandler->getLongitude(), gpsTimestamp);
+                } else {
+                    snprintf(payload, sizeof(payload), 
+                             "{\"type\":\"lightning\",\"distance\":%d,\"energy\":%lu,\"lat\":%.6f,\"lon\":%.6f}", 
+                             distance, energy, gpsHandler->getLatitude(), gpsHandler->getLongitude());
+                }
             } else {
                 snprintf(payload, sizeof(payload), 
                          "{\"type\":\"lightning\",\"distance\":%d,\"energy\":%lu}", 
@@ -123,13 +130,24 @@ void loop() {
         if (gpsHandler->hasLocation()) {
             Serial.println(gpsHandler->getFormattedLocation());
             
-            char payload[128];
-            snprintf(payload, sizeof(payload), 
-                     "{\"lat\":%.6f,\"lon\":%.6f,\"alt\":%.1f,\"sats\":%d}", 
-                     gpsHandler->getLatitude(), 
-                     gpsHandler->getLongitude(), 
-                     gpsHandler->getAltitude(), 
-                     gpsHandler->getSatellites());
+            char payload[256];
+            if (gpsHandler->hasTime()) {
+                unsigned long gpsTimestamp = gpsHandler->getTimestamp();
+                snprintf(payload, sizeof(payload), 
+                         "{\"lat\":%.6f,\"lon\":%.6f,\"alt\":%.1f,\"sats\":%d,\"gps_timestamp\":%lu}", 
+                         gpsHandler->getLatitude(), 
+                         gpsHandler->getLongitude(), 
+                         gpsHandler->getAltitude(), 
+                         gpsHandler->getSatellites(),
+                         gpsTimestamp);
+            } else {
+                snprintf(payload, sizeof(payload), 
+                         "{\"lat\":%.6f,\"lon\":%.6f,\"alt\":%.1f,\"sats\":%d}", 
+                         gpsHandler->getLatitude(), 
+                         gpsHandler->getLongitude(), 
+                         gpsHandler->getAltitude(), 
+                         gpsHandler->getSatellites());
+            }
             
             mqttEvents->publishEvent("meteo-rays/location", payload);
         }

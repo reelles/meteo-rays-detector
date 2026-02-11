@@ -48,7 +48,7 @@ mqtt->publishEvent("topic", "{\"data\":\"value\"}");
 
 ### GPSHandler
 
-Manages GPS module and provides location data.
+Manages GPS module and provides location data with timestamp support.
 
 ```cpp
 GPSHandler* gps = new GPSHandler();
@@ -58,7 +58,16 @@ if (gps->hasLocation()) {
     double lat = gps->getLatitude();
     double lon = gps->getLongitude();
 }
+if (gps->hasTime()) {
+    unsigned long timestamp = gps->getTimestamp();
+}
 ```
+
+**Features:**
+- Location tracking (latitude, longitude, altitude)
+- GPS timestamp (Unix time) for event synchronization
+- Satellite count
+- Validity checking
 
 ### AS3935Sensor
 
