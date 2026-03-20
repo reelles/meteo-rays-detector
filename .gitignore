@@ -1,0 +1,42 @@
+# IDE and Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+
+# Build artifacts
+*.o
+*.elf
+*.bin
+*.hex
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# CDK
+cdk.out/
+.cdk.staging/
+
+# Environment files
+.env
+.env.local
